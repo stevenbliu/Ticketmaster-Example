@@ -67,7 +67,10 @@ Online platform that allows user to purchase for events such as concerts and spo
     - Completed payment process
       - send user confirmation notification.  
 
-## Architecure
-  Drawn on PDF.
+## Architecure/Tech Stack
+  - Django
+  - PostgreSQL
+  - Redis
+  - ElasticSearch
 
 ***Possible Improvements*
