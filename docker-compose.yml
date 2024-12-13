@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: mydatabase  # Change this to your database name
+      POSTGRES_USER: myuser  # Change this to your username
+      POSTGRES_PASSWORD: mypassword  # Change this to your password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data between container restarts
+    networks:
+      - mynetwork
+
+  web:
+    build: .
+    container_name: django_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"  # Expose Django app on port 8000
+    networks:
+      - mynetwork
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com  # Set your pgAdmin login email
+      PGADMIN_DEFAULT_PASSWORD: admin  # Set your pgAdmin login password
+    ports:
+      - "5050:80"  # Expose pgAdmin web interface on port 5050
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  mynetwork:
+    driver: bridge
